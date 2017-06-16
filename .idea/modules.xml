@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ButterKnifeDemo.iml" filepath="$PROJECT_DIR$/ButterKnifeDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bindtype/bindtype.iml" filepath="$PROJECT_DIR$/bindtype/bindtype.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bindtype2/bindtype2.iml" filepath="$PROJECT_DIR$/bindtype2/bindtype2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bindview/bindview.iml" filepath="$PROJECT_DIR$/bindview/bindview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bindviewapi/bindviewapi.iml" filepath="$PROJECT_DIR$/bindviewapi/bindviewapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javapoetdemo/javapoetdemo.iml" filepath="$PROJECT_DIR$/javapoetdemo/javapoetdemo.iml" />
+    </modules>
+  </component>
+</project>

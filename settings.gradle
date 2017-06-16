@@ -1,0 +1,1 @@
+include ':app', ':JavaButterKnife', ':bindview', ':bindtype', ':javapoetdemo', ':bindtype2', ':bindviewapi', ':bindviewapi'
