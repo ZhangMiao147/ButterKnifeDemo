@@ -1,8 +1,12 @@
 package com.zhangmiao.mode;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
+import com.zhangmiao.TypeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +54,63 @@ public class AnnotatedClass {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .addParameter(TypeName.get(mClassElement.asType()), "host", Modifier.FINAL)
-                .addParameter(TypeName.OBJECT, "source");
-                //.addParameter(TypeUtil.FINDED, "finder");
-        return null;
+                .addParameter(TypeName.OBJECT, "source")
+                .addParameter(TypeUtil.FINDER, "finder");
+
+        if (bindLayoutClass != null) {
+            if (bindLayoutClass.getLayoutId() != 0) {
+                injectMethodBuilder.addStatement("host.setContentView($L)", bindLayoutClass.getLayoutId());
+            }
+        }
+
+        for (BindViewField field : mFields) {
+            injectMethodBuilder.addStatement("host.$N = ($T)(finder.findView(source,$L))", field.getFieldName()
+                    , ClassName.get(field.getFieldType()), field.getResId());
+        }
+
+        if (mMethods.size() > 0) {
+            injectMethodBuilder.addStatement("$T listener", TypeUtil.ANDROID_ON_CLICK_LISTENER);
+        }
+        for (OnClickMethod method : mMethods) {
+            TypeSpec listener = TypeSpec.annotationBuilder("")
+                    .addSuperinterface(TypeUtil.ANDROID_ON_CLICK_LISTENER)
+                    .addMethod(MethodSpec.methodBuilder("onClick")
+                            .addAnnotation(Override.class)
+                            .addModifiers(Modifier.PUBLIC)
+                            .returns(TypeName.VOID)
+                            .addParameter(TypeUtil.ANDROID_VIEW, "view")
+                            .addStatement("host.$N()", method.getMethodName())
+                            .build()
+                    ).build();
+            injectMethodBuilder.addStatement("listener = $L", listener);
+
+            for (int id : method.ids) {
+                injectMethodBuilder.addStatement("finder.findView(source, $L).setOnClickListener(listener)", id);
+            }
+        }
+        String packageName = getPackageName(mClassElement);
+        String className = getClassName(mClassElement, packageName);
+        ClassName bindingClassName = ClassName.get(packageName, className);
+
+        System.out.println("------mClassElement-getSimpleName------>>>>" + mClassElement.getSimpleName().toString());
+        System.out.println("------bindingClassName-simpleName------>>>>" + bindingClassName.simpleName());
+
+        TypeSpec finderClass = TypeSpec.classBuilder(bindingClassName.simpleName() + "$$Injector")
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(ParameterizedTypeName.get(TypeUtil.INJECTOR, TypeName.get(mClassElement.asType())))
+                .addMethod(injectMethodBuilder.build())
+                .build();
+
+        return JavaFile.builder(packageName, finderClass).build();
+    }
+
+    private String getPackageName(TypeElement type) {
+        return mElementUtils.getPackageOf(type).getQualifiedName().toString();
+    }
+
+    private static String getClassName(TypeElement type, String packageName) {
+        int packageLen = packageName.length() + 1;
+        return type.getQualifiedName().toString().substring(packageLen).replace('.', '$');
     }
 
 

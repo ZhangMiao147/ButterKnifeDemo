@@ -24,7 +24,7 @@ public class OnClickMethod {
         }
         ExecutableElement methodElement = (ExecutableElement) element;
         this.mMethodName = methodElement.getSimpleName();
-        ids = methodElement.getAnnotation(OnClick.class).value();
+        this.ids = methodElement.getAnnotation(OnClick.class).value();
         if (ids == null) {
             throw new IllegalArgumentException(String.format("Must set valid ids for @%s", OnClick.class.getSimpleName()));
         } else {

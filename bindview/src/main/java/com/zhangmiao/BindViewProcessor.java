@@ -1,19 +1,16 @@
 package com.zhangmiao;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -21,16 +18,14 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.zhangmiao.bindtype.MyBindView;
+import com.google.auto.service.AutoService;
 import com.zhangmiao.mode.AnnotatedClass;
 import com.zhangmiao.mode.BindLayoutClass;
 import com.zhangmiao.mode.BindViewField;
 import com.zhangmiao.mode.OnClickMethod;
 
-
-public class BindViewProcessor extends AbstractProcessor{
+@AutoService(Processor.class)
+public class BindViewProcessor extends AbstractProcessor {
 
     private Filer mFiler;
     private Elements mElementUtils;//元素相关的辅助类
@@ -42,7 +37,7 @@ public class BindViewProcessor extends AbstractProcessor{
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         mFiler = processingEnv.getFiler();
-        System.out.println("mFiler = "+mFiler);
+        System.out.println("mFiler = " + mFiler);
         mElementUtils = processingEnv.getElementUtils();
         mMessager = processingEnv.getMessager();
     }
@@ -67,7 +62,7 @@ public class BindViewProcessor extends AbstractProcessor{
         try {
             processBindView(roundEnv);
             processOnClick(roundEnv);
-            processOnClick(roundEnv);
+            processBindLayout(roundEnv);
         } catch (IllegalArgumentException e) {
             error(e.getMessage());
             return true;
@@ -102,7 +97,7 @@ public class BindViewProcessor extends AbstractProcessor{
 
     private void processBindLayout(RoundEnvironment roundEnv) {
         for (Element element : roundEnv.getElementsAnnotatedWith(BindLayout.class)) {
-            AnnotatedClass annotatedClass = getAnnotatedClass(element);
+            AnnotatedClass annotatedClass = getAnnotatedClassForBindLayout(element);
             BindLayoutClass bindLayoutClass = new BindLayoutClass(element);
             annotatedClass.setContentLayoutId(bindLayoutClass);
         }

@@ -10,30 +10,28 @@
     android:paddingRight="64dp"
     android:paddingTop="16dp"
     tools:context="com.zhangmiao.butterknifedemo.MainActivity">
-<!--
+
     <fragment
         class="com.zhangmiao.butterknifedemo.MyFragment"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:tag="hello"/>
--->
+        android:tag="hello" />
+
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Hello World!"
-        android:textAllCaps="false"
-        />
+        android:textAllCaps="false" />
 
     <Button
-    android:id="@+id/id_btn0"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:text="OnClick-测试0"
-    android:textAllCaps="false"
-    />
+        android:id="@+id/id_btn0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="OnClick-测试0"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/id_btn1"
@@ -41,8 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="OnClick-测试1"
-        android:textAllCaps="false"
-        />
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/id_btn2"
@@ -50,7 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="在adapter中使用-测试"
-        android:textAllCaps="false"
-        />
+        android:textAllCaps="false" />
 
 </LinearLayout>
